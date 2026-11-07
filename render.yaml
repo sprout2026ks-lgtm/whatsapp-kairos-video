@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: kairos-whatsapp-bot
+    env: node
+    plan: free
+    buildCommand: npm install --prefix backend
+    startCommand: node backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_WABA_ID
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER
+        sync: false
+      - key: GRAPH_API_VERSION
+        value: v26.0
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false

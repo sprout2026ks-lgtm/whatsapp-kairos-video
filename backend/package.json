@@ -1,0 +1,28 @@
+{
+  "name": "kairos-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "Kairos Lite Official WhatsApp Chatbot powered by Meta WhatsApp Cloud API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test-chatbot.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "meta-cloud-api",
+    "chatbot",
+    "kairos-lite",
+    "jobs",
+    "internship",
+    "courses"
+  ],
+  "author": "Kairos Lite",
+  "license": "ISC",
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

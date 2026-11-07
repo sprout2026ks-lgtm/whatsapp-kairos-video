@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kairos | Business Success Class</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #151928 0%, #0a0c13 100%);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Bar */
+    header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .badge-secure {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    .badge-secure .pulse {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1080px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Video Player Wrapper */
+    .player-card {
+      position: relative;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(6, 182, 212, 0.1);
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      max-height: 75vh;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: #000;
+      outline: none;
+    }
+
+    /* Dynamic Anti-Piracy Watermark Overlay */
+    #watermark-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .floating-watermark {
+      position: absolute;
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.38);
+      white-space: nowrap;
+      transition: all 4s ease-in-out;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    /* Resume Notification Banner */
+    .resume-banner {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid #06b6d4;
+      backdrop-filter: blur(10px);
+      padding: 10px 18px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #e2e8f0;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 30;
+      animation: fadeInDown 0.4s ease-out;
+    }
+
+    /* Module Completed Celebration Overlay */
+    .completion-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 12, 19, 0.92);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+      text-align: center;
+      padding: 24px;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .completion-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      max-width: 440px;
+    }
+
+    .completion-celebration {
+      font-size: 52px;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .completion-content h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #34d399;
+    }
+
+    .completion-content p {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .completion-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn-completion {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary-comp {
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-primary-comp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+    }
+
+    .btn-wa-comp {
+      background: rgba(37, 211, 102, 0.15);
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      color: #25d366;
+    }
+
+    .btn-wa-comp:hover {
+      background: rgba(37, 211, 102, 0.25);
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translate(-50%, -15px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    .resume-banner .icon {
+      font-size: 16px;
+    }
+
+    /* Lesson Metadata Card */
+    .info-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .lesson-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .student-tag {
+      font-size: 13px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .student-tag strong {
+      color: #38bdf8;
+    }
+
+    .progress-bar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
+      transition: width 0.3s ease;
+    }
+
+    .security-notice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #64748b;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Anti-Sharing Device Lockout Screen */
+    .lock-screen-card {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(145deg, rgba(30, 20, 25, 0.95) 0%, rgba(15, 18, 30, 0.95) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 20px;
+      padding: 48px 28px;
+      box-shadow: 0 20px 45px rgba(239, 68, 68, 0.15);
+      margin-bottom: 24px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .lock-icon-wrap {
+      width: 76px;
+      height: 76px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
+    }
+
+    .lock-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fca5a5;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .lock-message {
+      font-size: 15px;
+      color: #cbd5e1;
+      max-width: 540px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      white-space: pre-line;
+    }
+
+    .lock-policy-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #94a3b8;
+      max-width: 520px;
+      text-align: left;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .lock-policy-box strong {
+      color: #f87171;
+    }
+
+    .lock-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .lock-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(37, 211, 102, 0.4);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">K</div>
+      <div>
+        <div class="brand-title">Kairos</div>
+        <div class="brand-sub">Official Student Portal</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Anti-Sharing Lockdown Modal (Shown when link is copied to someone else) -->
+    <div id="device-lock-screen" class="lock-screen-card">
+      <div class="lock-icon-wrap">🛡️</div>
+      <h2 class="lock-title">Access Restricted: Device Locked</h2>
+      <p id="lock-screen-message" class="lock-message">
+        This video lesson is locked to the original student's device.
+        Link sharing and forwarding are strictly prohibited under Kairos Security Policy.
+      </p>
+      <div class="lock-policy-box">
+        ⚠️ <strong>Single-Device Security Policy:</strong><br>
+        • Video lessons cannot be shared, forwarded, or accessed across multiple devices.<br>
+        • This link has already been claimed by the student's registered browser session.<br>
+        • <span id="lock-screen-phone" style="color: #cbd5e1;">Original Account Verification Active</span>
+      </div>
+      <a href="https://wa.me/917010472311?text=Hi" class="lock-action-btn">
+        <span>💬 Open WhatsApp to Start Your Class</span>
+      </a>
+    </div>
+
+    <!-- Video Player Box -->
+    <div class="player-card" id="player-container">
+      <div id="resume-banner" class="resume-banner" style="display: none;">
+        <span class="icon">⏱️</span>
+        <span id="resume-text">Resuming from where you left off...</span>
+      </div>
+
+      <!-- Module Completed Celebration Overlay -->
+      <div id="completion-overlay" class="completion-overlay" style="display: none;">
+        <div class="completion-content">
+          <div class="completion-celebration">🎉</div>
+          <h2 id="completion-title">Module Completed!</h2>
+          <p id="completion-subtitle">The next video lesson has been sent to your WhatsApp!</p>
+          <div class="completion-buttons">
+            <a id="btn-next-module" href="#" class="btn-completion btn-primary-comp" style="display: none;">
+              ▶️ Play Next Module
+            </a>
+            <a href="https://wa.me/917010472311?text=Hi" class="btn-completion btn-wa-comp">
+              💬 Open WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <video 
+        id="video-player" 
+        controls 
+        controlsList="nodownload noplaybackrate" 
+        disablePictureInPicture 
+        playsinline
+        webkit-playsinline
+        x5-playsinline
+        preload="auto"
+      >
+        Your browser does not support video playback.
+      </video>
+    </div>
+
+    <!-- Info & Progress Details -->
+    <div class="info-card">
+      <div class="info-header">
+        <div>
+          <h1 class="lesson-title" id="module-title">Module 1: Business Success Class</h1>
+          <div class="student-tag">
+            Student: <strong id="student-name">Sabari</strong> (<span id="student-phone">+91 9500406150</span>)
+          </div>
+        </div>
+        <div class="badge-secure" style="background: rgba(6, 182, 212, 0.12); border-color: rgba(6, 182, 212, 0.3); color: #38bdf8;">
+          <span id="save-status">☁️ Synced with Google Sheets</span>
+        </div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-labels">
+          <span id="time-current">00:00</span>
+          <span id="time-remaining">--:--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Kairos. All rights reserved.
+  </footer>
+
+  <script>
+    // Extract token from query params OR from path (/classroom/:sessionId)
+    const urlParams = new URLSearchParams(window.location.search);
+    let sessionParam = urlParams.get('token') || urlParams.get('session');
+    if (!sessionParam) {
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      if (pathParts.length >= 2 && pathParts[0] === 'classroom') {
+        sessionParam = pathParts[1];
+      }
+    }
+
+    const video = document.getElementById('video-player');
+    const resumeBanner = document.getElementById('resume-banner');
+    const resumeText = document.getElementById('resume-text');
+    const studentNameEl = document.getElementById('student-name');
+    const studentPhoneEl = document.getElementById('student-phone');
+    const moduleTitleEl = document.getElementById('module-title');
+    const saveStatusEl = document.getElementById('save-status');
+    const progressFill = document.getElementById('progress-fill');
+    const timeCurrent = document.getElementById('time-current');
+    const timeRemaining = document.getElementById('time-remaining');
+
+    let initialResumeSeconds = 0;
+    let hasAppliedInitialSeek = false;
+    let studentData = null;
+    let activeToken = null;
+
+    // Device signature (stored in localStorage) to lock this session to this exact device
+    function getOrCreateDeviceSig() {
+      let sig = localStorage.getItem('sproutks_device_sig');
+      if (!sig) {
+        try {
+          const arr = new Uint8Array(16);
+          window.crypto.getRandomValues(arr);
+          sig = Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+          sig = 'dev_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+        }
+        localStorage.setItem('sproutks_device_sig', sig);
+      }
+      return sig;
+    }
+
+    const currentDeviceSig = getOrCreateDeviceSig();
+
+    function showDeviceLockScreen(message, phone) {
+      const container = document.getElementById('player-container');
+      const infoCard = document.querySelector('.info-card');
+      if (container) container.style.display = 'none';
+      if (infoCard) infoCard.style.display = 'none';
+
+      const lockScreen = document.getElementById('device-lock-screen');
+      const lockMsg = document.getElementById('lock-screen-message');
+      const lockPhone = document.getElementById('lock-screen-phone');
+
+      if (lockMsg && message) lockMsg.innerText = message;
+      if (lockPhone && phone) lockPhone.innerText = `Original Account: ...${phone}`;
+      if (lockScreen) lockScreen.style.display = 'flex';
+    }
+
+    // Initialize player with verified session & device binding
+    async function initPlayer() {
+      if (!sessionParam) {
+        showDeviceLockScreen("Missing session identifier. Please launch your class link directly from WhatsApp.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/video/session?session=${encodeURIComponent(sessionParam)}&deviceSig=${encodeURIComponent(currentDeviceSig)}`);
+        const data = await res.json();
+
+        if (!data.success) {
+          if (data.deviceLocked) {
+            showDeviceLockScreen(data.message, data.phone);
+          } else {
+            showDeviceLockScreen(data.message || "Classroom access denied. Please verify your enrollment.");
+          }
+          return;
+        }
+
+        studentData = data.student;
+        activeToken = data.token || sessionParam;
+        initialResumeSeconds = Number(studentData.startProgress) || 0;
+
+        // Set student labels
+        studentNameEl.textContent = studentData.name.toUpperCase();
+        studentPhoneEl.textContent = studentData.phone;
+
+        const modId = studentData.moduleId || 1;
+        moduleTitleEl.textContent = `Module ${modId}: Business Success Class`;
+
+        // Point video source directly to authenticated stream endpoint locked to this device
+        const streamUrl = `/api/video/stream/${encodeURIComponent(activeToken)}?sig=${encodeURIComponent(currentDeviceSig)}`;
+        video.src = streamUrl;
+        video.load();
+
+      } catch (err) {
+        console.error("Initialization error:", err);
+        showDeviceLockScreen("Unable to establish secure connection to video stream.");
+      }
+    }
+
+    function applyResumeSeek() {
+      if (!hasAppliedInitialSeek && initialResumeSeconds > 0) {
+        hasAppliedInitialSeek = true;
+        if (video.duration && initialResumeSeconds < video.duration - 2) {
+          video.currentTime = initialResumeSeconds;
+        } else {
+          video.currentTime = initialResumeSeconds;
+        }
+
+        resumeText.textContent = `Resumed at ${formatTime(initialResumeSeconds)} from where you stopped`;
+        resumeBanner.style.display = 'flex';
+
+        setTimeout(() => {
+          resumeBanner.style.display = 'none';
+        }, 6000);
+      }
+    }
+
+    // Auto-resume logic when video is ready
+    video.addEventListener('loadedmetadata', applyResumeSeek);
+    video.addEventListener('canplay', applyResumeSeek);
+    video.addEventListener('play', applyResumeSeek);
+
+    // Module completion handler & auto-progression
+    let hasCompletedModule = false;
+
+    async function handleModuleCompletion() {
+      if (hasCompletedModule) return;
+      hasCompletedModule = true;
+
+      saveStatusEl.textContent = "🎉 Module Completed!";
+
+      try {
+        const res = await fetch('/api/video/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: activeToken || sessionParam,
+            deviceSig: currentDeviceSig,
+            moduleId: studentData ? studentData.moduleId : 1
+          })
+        });
+        const data = await res.json();
+        showCompletionOverlay(data);
+      } catch (err) {
+        console.warn("[Video Player] Error notifying module completion:", err.message);
+      }
+    }
+
+    function showCompletionOverlay(data) {
+      const overlay = document.getElementById('completion-overlay');
+      const titleEl = document.getElementById('completion-title');
+      const subEl = document.getElementById('completion-subtitle');
+      const nextBtn = document.getElementById('btn-next-module');
+
+      const currentMod = studentData ? studentData.moduleId : 1;
+
+      if (data && data.allCompleted) {
+        if (titleEl) titleEl.textContent = "🎓 Course Completed! 🏆";
+        if (subEl) subEl.textContent = "Congratulations! You have finished all 12 modules of Business Success Class. Your completion message has been sent to WhatsApp!";
+        if (nextBtn) nextBtn.style.display = 'none';
+      } else {
+        const nextMod = (data && data.nextModule) ? data.nextModule : (currentMod + 1);
+        if (titleEl) titleEl.textContent = `🎉 Module ${currentMod} Completed!`;
+        if (subEl) subEl.textContent = `Fantastic job! Module ${nextMod} link has been sent to your WhatsApp.`;
+
+        if (data && data.nextClassroomUrl && nextBtn) {
+          nextBtn.href = data.nextClassroomUrl;
+          nextBtn.textContent = `▶️ Play Module ${nextMod}`;
+          nextBtn.style.display = 'inline-flex';
+        }
+      }
+
+      if (overlay) overlay.style.display = 'flex';
+    }
+
+    video.addEventListener('ended', handleModuleCompletion);
+
+    // Time update for progress bar and labels
+    video.addEventListener('timeupdate', () => {
+      const cur = video.currentTime;
+      const dur = video.duration || 1;
+      const percent = (cur / dur) * 100;
+
+      progressFill.style.width = `${percent}%`;
+      timeCurrent.textContent = formatTime(cur);
+      timeRemaining.textContent = formatTime(dur);
+
+      // Detect if user watched to the very end (within 1.5 seconds)
+      if (dur > 5 && cur >= dur - 1.5) {
+        handleModuleCompletion();
+      }
+    });
+
+    // Sync watch progress to Google Sheets every 5 seconds
+    async function syncProgress() {
+      if (!video || video.paused || video.ended) return;
+      const currentSeconds = Math.floor(video.currentTime);
+      if (currentSeconds <= 0) return;
+
+      try {
+        saveStatusEl.textContent = "⏳ Saving progress...";
+        const res = await fetch('/api/video/progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: activeToken || sessionParam,
+            progressSeconds: currentSeconds,
+            deviceSig: currentDeviceSig
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          saveStatusEl.textContent = `☁️ Synced (${formatTime(currentSeconds)})`;
+        }
+      } catch (err) {
+        console.warn("Failed to sync progress:", err.message);
+      }
+    }
+
+    setInterval(syncProgress, 5000);
+
+    // Also sync on pause
+    video.addEventListener('pause', () => {
+      syncProgress();
+    });
+
+    // Sync on page close / unload
+    window.addEventListener('beforeunload', () => {
+      if (video && !video.paused) {
+        navigator.sendBeacon(
+          '/api/video/progress',
+          new Blob([JSON.stringify({ token: activeToken || sessionParam, progressSeconds: Math.floor(video.currentTime) })], { type: 'application/json' })
+        );
+      }
+    });
+
+    // Anti-Piracy Keyboard Restrictions
+    window.addEventListener('keydown', (e) => {
+      // Prevent PrintScreen, F12, Ctrl+S, Ctrl+U, Ctrl+Shift+I
+      if (
+        e.key === 'PrintScreen' ||
+        e.key === 'F12' ||
+        (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p')) ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J'))
+      ) {
+        e.preventDefault();
+        alert("⚠️ Content Protection: Screen capture and developer shortcuts are strictly prohibited.");
+        return false;
+      }
+    });
+
+    // Kickoff
+    initPlayer();
+  </script>
+</body>
+</html>
