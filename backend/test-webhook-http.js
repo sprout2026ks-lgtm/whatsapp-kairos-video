@@ -78,7 +78,7 @@ async function testHttpEndpoints() {
                   messaging_product: "whatsapp",
                   metadata: {
                     display_phone_number: "49XXXXXXXXXX",
-                    phone_number_id: process.env.WHATSAPP_PHONE_NUMBER_ID || "1441499925712464"
+                    phone_number_id: process.env.WHATSAPP_PHONE_NUMBER_ID || "1373840235818636"
                   },
                   messages: [
                     {
@@ -118,7 +118,7 @@ async function testHttpEndpoints() {
                 value: {
                   messaging_product: "whatsapp",
                   metadata: {
-                    phone_number_id: process.env.WHATSAPP_PHONE_NUMBER_ID || "1441499925712464"
+                    phone_number_id: process.env.WHATSAPP_PHONE_NUMBER_ID || "1373840235818636"
                   },
                   statuses: [
                     {

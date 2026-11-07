@@ -82,7 +82,7 @@ async function processMessage(phone, userMessage = "", buttonId = null, messageI
 
   // CASE 1: Student not found in Google Sheets (Unregistered Visitor)
   if (!sheetResult.success || !sheetResult.student) {
-    const defaultBaseUrl = (process.env.SERVER_BASE_URL || "https://sentences-david-shirts-fathers.trycloudflare.com").replace(/\/$/, "");
+    const defaultBaseUrl = (process.env.SERVER_BASE_URL || "https://whatsapp-kairos-video.onrender.com").replace(/\/$/, "");
     return [
       {
         type: "image",
@@ -110,7 +110,7 @@ async function processMessage(phone, userMessage = "", buttonId = null, messageI
   const currentModProgress = Number(progressData.moduleProgress[String(currentModule)]) || 0;
   const progressFormatted = formatDuration(currentModProgress);
   const completedCount = Array.isArray(progressData.completedModules) ? progressData.completedModules.length : 0;
-  const baseUrl = (process.env.SERVER_BASE_URL || "https://sentences-david-shirts-fathers.trycloudflare.com").replace(/\/$/, "");
+  const baseUrl = (process.env.SERVER_BASE_URL || "https://whatsapp-kairos-video.onrender.com").replace(/\/$/, "");
 
   // ========================================================
   // UNPAID / PENDING STUDENTS (paymentStatus === 'no')

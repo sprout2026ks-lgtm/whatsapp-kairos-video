@@ -11,7 +11,7 @@ class WhatsAppService {
 
   getBaseUrl() {
     const graphApiVersion = process.env.GRAPH_API_VERSION || "v26.0";
-    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1441499925712464";
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1373840235818636";
     return `https://graph.facebook.com/${graphApiVersion}/${phoneNumberId}`;
   }
 
@@ -26,7 +26,9 @@ class WhatsAppService {
    * Authorization headers for Meta Graph API
    */
   getHeaders() {
-    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+    const token =
+      process.env.WHATSAPP_ACCESS_TOKEN ||
+      "EAAPsDL5wjWIBSyLWUOd30q8oLPPVwoUivhnwMSuzjRa1F4DQPgNPMD0ITjNKd2ls2LSEPUKPmjzqbpHfyP5uYD4e3JlDQ4xdfNNIQOy27IhYWi1AEekYWCywMm5xwvunGTFd1lRLAxcHUPZCLOlCyJViyaJ81s0yfxvoctwAJ2T9vwUZBUNRC0RuzT0gWZA7QZDZD";
     if (!token || token === "YOUR_SYSTEM_USER_ACCESS_TOKEN") {
       console.warn("[WhatsApp Service Warning] WHATSAPP_ACCESS_TOKEN is missing or not configured in .env!");
     }
@@ -452,15 +454,17 @@ class WhatsAppService {
 
 /**
  * Standalone reusable function for sending WhatsApp Cloud API messages
- * POST https://graph.facebook.com/v26.0/1441499925712464/messages
- * Reads token from process.env.WHATSAPP_ACCESS_TOKEN without hardcoding.
+ * POST https://graph.facebook.com/v26.0/1373840235818636/messages
+ * Reads token from process.env.WHATSAPP_ACCESS_TOKEN with safe fallback.
  * 
  * @param {string} to Recipient phone number
  * @param {string} message Text message body
  */
 async function sendWhatsAppMessage(to, message) {
-  const token = process.env.WHATSAPP_ACCESS_TOKEN;
-  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1441499925712464";
+  const token =
+    process.env.WHATSAPP_ACCESS_TOKEN ||
+    "EAAPsDL5wjWIBSyLWUOd30q8oLPPVwoUivhnwMSuzjRa1F4DQPgNPMD0ITjNKd2ls2LSEPUKPmjzqbpHfyP5uYD4e3JlDQ4xdfNNIQOy27IhYWi1AEekYWCywMm5xwvunGTFd1lRLAxcHUPZCLOlCyJViyaJ81s0yfxvoctwAJ2T9vwUZBUNRC0RuzT0gWZA7QZDZD";
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1373840235818636";
   const apiVersion = process.env.GRAPH_API_VERSION || "v26.0";
   const cleanTo = String(to || "").replace(/\D/g, "");
 

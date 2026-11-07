@@ -73,8 +73,8 @@ app.get("/", (req, res) => {
   res.json({
     status: "online",
     service: "Kairos Lite WhatsApp Cloud API Chatbot Backend",
-    phoneRegistered: process.env.WHATSAPP_PHONE_NUMBER || "+49XXXXXXXXXX",
-    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "1441499925712464",
+    phoneRegistered: process.env.WHATSAPP_PHONE_NUMBER || "+917010472311",
+    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "1373840235818636",
     graphApiVersion: process.env.GRAPH_API_VERSION || "v26.0",
     webhookConfigured: "/webhook",
     timestamp: new Date().toISOString()
@@ -212,7 +212,7 @@ app.post("/api/video/complete", async (req, res) => {
   const modId = Math.min(6, Math.max(1, Number(moduleId || payload.moduleId) || 1));
 
   const result = studentProgressService.completeModule(phone, modId);
-  const baseUrl = (process.env.SERVER_BASE_URL || "").replace(/\/$/, "");
+  const baseUrl = (process.env.SERVER_BASE_URL || "https://whatsapp-kairos-video.onrender.com").replace(/\/$/, "");
   const rawName = payload.name || "Student";
   const studentName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
 
@@ -393,11 +393,22 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`📋 Candidate leads endpoint: http://localhost:${PORT}/leads`);
   console.log(
     `📱 WhatsApp Number ID: ${
-      process.env.WHATSAPP_PHONE_NUMBER_ID || "1441499925712464"
+      process.env.WHATSAPP_PHONE_NUMBER_ID || "1373840235818636"
     }`
   );
   console.log(
     `🌐 Graph API Version: ${process.env.GRAPH_API_VERSION || "v26.0"}`
   );
   console.log("==================================================");
+
+  // Automatic Keep-Awake Heartbeat to prevent Render Free Tier sleep (every 10 minutes)
+  const https = require("https");
+  const keepAliveUrl = "https://whatsapp-kairos-video.onrender.com/health";
+  setInterval(() => {
+    https.get(keepAliveUrl, (res) => {
+      console.log(`[Keep-Alive Ping] Render heartbeat status: ${res.statusCode}`);
+    }).on("error", (err) => {
+      console.warn(`[Keep-Alive Ping] Heartbeat ping notice: ${err.message}`);
+    });
+  }, 10 * 60 * 1000);
 });
