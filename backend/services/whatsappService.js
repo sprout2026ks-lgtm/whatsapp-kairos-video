@@ -91,6 +91,47 @@ class WhatsAppService {
   }
 
   /**
+   * Send a Meta pre-approved message template (works 24/7 even outside the 24-hour window)
+   * 
+   * @param {string} to WhatsApp phone number
+   * @param {string} templateName Name of template registered in Meta (e.g. "kairos_study_greeting")
+   * @param {string[]} [parameters] Array of variable values for {{1}}, {{2}}, etc.
+   * @param {string} [languageCode] Template language code (default: "en_US")
+   */
+  async sendTemplateMessage(to, templateName, parameters = [], languageCode = "en_US") {
+    if (!to || !templateName) {
+      console.error("[WhatsApp Service] Missing recipient phone or template name.");
+      return null;
+    }
+    const cleanTo = this.cleanPhone(to);
+    const bodyParameters = (parameters || []).map((val) => ({
+      type: "text",
+      text: String(val)
+    }));
+
+    const payload = {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: cleanTo,
+      type: "template",
+      template: {
+        name: templateName,
+        language: { code: languageCode },
+        components:
+          bodyParameters.length > 0
+            ? [
+                {
+                  type: "body",
+                  parameters: bodyParameters
+                }
+              ]
+            : undefined
+      }
+    };
+    return this.executeSend(payload);
+  }
+
+  /**
    * Send a native Image message directly in WhatsApp
    * 
    * @param {string} to WhatsApp phone number
